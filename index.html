@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biaya Asuransi Paket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('Background_Red.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .form-section h3 {
+            background: #ff0000;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+        }
+        .cek-button {
+            width: 100%;
+            padding: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cek-button:hover {
+            background: #ff0000;
+        }
+        .catatan {
+            background: #f8e5ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .catatan h4 {
+            color: #ff0000;
+        }
+        /* Pesan error */
+        .error-message {
+            color: red;
+            background: #ffe5e5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h3>Masukkan Data Paket</h3>
+            <label>Nama Penerima*</label>
+            <input type="text" id="namaPenerima" placeholder="Masukkan nama penerima">
+            
+            <label>Nomor Handphone*</label>
+            <input type="text" id="nomorHp" placeholder="Masukkan nomor handphone">
+            
+            <label>Nilai Paket (Rp)*</label>
+            <input type="text" id="nilaiBarang" placeholder="Rp 0" oninput="formatRupiah(this)" onblur="hitungAsuransi()">
+        </div>
+
+        <div class="form-section">
+            <h3>Opsi Delivery</h3>
+            <label>Asuransi Paket</label>
+            <input type="text" id="biayaAsuransi" value="Rp 0" readonly>
+        </div>
+
+        <div id="error-message" class="error-message"></div> <!-- Pesan Error -->
+
+        <button class="cek-button" onclick="bayarAsuransi()">Bayar Asuransi</button>
+
+        <div class="catatan">
+            <h4>Catatan:</h4>
+            <ul>
+                <li>Pihak J&T tidak bertanggung jawab apabila paket barang tidak terdaftar asuransi, <strong>dengan masalah paket barang yang rusak atau pun hilang</strong>.</li> 
+                <li>Biaya asuransi akan dikembalikan setelah paket Anda sampai tanpa potongan dari pihak manapun.</li>       
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function formatRupiah(input) {
+            let angka = input.value.replace(/[^0-9]/g, '');
+            if (angka === "") {
+                input.value = "Rp 0";
+                return;
+            }
+            let rupiah = new Intl.NumberFormat("id-ID").format(angka); 
+            input.value = "Rp " + rupiah;
+        }
+
+        function hitungAsuransi() {
+            let nilaiBarang = document.getElementById("nilaiBarang").value.replace(/[^0-9]/g, '');
+            let biayaAsuransi = nilaiBarang > 0 ? nilaiBarang * 0.40 : 0;
+            document.getElementById("biayaAsuransi").value = "Rp " + new Intl.NumberFormat("id-ID").format(Math.round(biayaAsuransi));
+        }
+
+        function bayarAsuransi() {
+            let nama = document.getElementById("namaPenerima").value.trim();
+            let hp = document.getElementById("nomorHp").value.trim();
+            let nilai = document.getElementById("nilaiBarang").value.trim();
+            let errorMessage = document.getElementById("error-message");
+
+            if (nama === "" || hp === "" || nilai === "Rp 0") {
+                errorMessage.innerText = "Harap isi semua data dengan benar.";
+                errorMessage.style.display = "block";
+                return;
+            } else {
+                errorMessage.style.display = "none"; // Sembunyikan pesan error jika semua input terisi
+            }
+
+            window.location.href = "rekening.html";
+        }
+    </script>
+</body>
+</html>
